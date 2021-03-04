@@ -1,30 +1,37 @@
 #!/bin/sh
 
-# config xray
+# config trojan
 cat << EOF > /etc/config.json
 {
-  "inbounds":[
-    {
-      "port": $PORT,
-      "protocol": "$PROTOCOL",
-      "settings": {
-        "decryption": "none",
-        "clients": [
-          {
-            "id": "$UUID"
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "ws"
-      }
-    }
-  ],
-  "outbounds": [
-    {
-      "protocol": "freedom"
-    }
-  ]
+    "inbounds": [
+        {
+            "port": 443,
+            "protocol": "trojan",
+            "settings": {
+                "clients": [
+                    {
+                        "password":"$UUID",
+                        "email": "love@example.com"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "alpn": [
+                        "http/1.1"
+                    ]
+                    
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
 }	
 EOF
 
